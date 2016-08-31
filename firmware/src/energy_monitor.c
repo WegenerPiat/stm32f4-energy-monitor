@@ -96,6 +96,7 @@ void error_condition();
 
 #define INSTANT_AVG_BITS    5
 #define INSTANT_AVG_NUM     (1<<INSTANT_AVG_BITS)
+#define SIZE_BUFF 			50			//taille du buffer
 
 typedef struct {
     uint64_t energy_accum;
@@ -104,16 +105,15 @@ typedef struct {
     unsigned peak_voltage;
     unsigned peak_current;
     unsigned n_samples;
-    uint64_t avg_current;
+    uint64_t test_tension;
     uint64_t avg_voltage;
 } accumulated_data;
 
 typedef struct {
     unsigned voltage;
     unsigned current;
-    unsigned average_voltage;
-    unsigned average_current;
-    uint64_t current_time;
+
+    uint64_t current_time;    
 } instant_data;
 
 int tperiod=500;
@@ -138,10 +138,24 @@ typedef struct {
     unsigned short avgI[INSTANT_AVG_NUM], avgV[INSTANT_AVG_NUM];
     unsigned short avg_ptr;
 
-    unsigned char chans[2];
+    unsigned char chans[1];
 } measurement_point;
 
+/////////buffer circulaire/////////
+typedef struct {	
+	uint64_t *buffer_complete;		//totalite du buffer
+	uint64_t *read_bc;				//pointeur de lecture
+	uint64_t *write_bc;				//pointeur d ecriture
+	
+	uint64_t *debut;				//pointeur de debut
+	uint64_t *fin;					//pointeur de fin
+
+	int nb_read;					//nombre de donnee envoyee
+	int nb_write;					//nombre de donnee ecrite
+} buff;
+
 measurement_point m_points[4] = {0};
+buff bc;
 
 int adc_to_mpoint[3] = {-1, -1, -1};
 
@@ -165,12 +179,8 @@ void exti_setup(int m_point)
     nvic_disable_irq(NVIC_EXTI4_IRQ);
     nvic_disable_irq(NVIC_EXTI9_5_IRQ);
     nvic_disable_irq(NVIC_EXTI15_10_IRQ);
-    // timer_disable_counter(TIM3);
     exti_reset_request(EXTI0 | EXTI1 | EXTI2 | EXTI3 | EXTI4 | EXTI5 | EXTI6  | EXTI7
             | EXTI8 | EXTI9 | EXTI10 | EXTI11 | EXTI12 | EXTI13 | EXTI14  | EXTI15);
-
-    // if(m_points[m_point].trigger_port == -1)
-        // return;
 
     for(i = 0; i < 4; ++i)
     {
@@ -201,6 +211,120 @@ void exti_setup(int m_point)
     }
 }
 
+
+/////////////// Buffer circulaire ///////////
+/* fonction d initialisation du buffer */
+
+void init_Buff()
+{
+	bc.buffer_complete = NULL;
+
+	bc.buffer_complete = malloc(SIZE_BUFF * sizeof(uint64_t));	//creation du buffer
+	
+	if(bc.buffer_complete == NULL)		//test validite
+	{
+		exit(0);
+	}
+
+	bc.debut = bc.buffer_complete;
+	bc.fin = bc.buffer_complete + SIZE_BUFF;
+
+	bc.read_bc = bc.debut;
+	bc.write_bc = bc.debut + 1;
+
+	bc.nb_write = 0;
+	bc.nb_read = 0;
+
+}
+
+/* fonction pour rendre la memoire */
+void buff_free()
+{
+	free(bc.buffer_complete);	// On rend la place
+}
+
+
+/* 
+
+cas 1: write et read non passer
+cas 2: write passer read non passer
+
+*/
+int write_buff(int m_point)		//rajouter la donnee
+{
+
+	if((bc.nb_write % (SIZE_BUFF/2)) >= (bc.nb_read % (SIZE_BUFF/2)))
+	{
+		// cas 1: write et read non passer
+
+		
+		if(bc.nb_write >= (bc.nb_read + (SIZE_BUFF/2)))	// test buff plein
+		{											// ne peut jamais
+			return(0);								// ici normalement
+		}
+	
+		*bc.write_bc = m_points[m_point].lastV;	//valeur de l'adc
+
+		bc.nb_write++;							//on incremente l ecriture
+		if(bc.write_bc >= bc.fin)				//Si write arrive a la fin
+		{
+			bc.write_bc = bc.debut;
+		}else
+			bc.write_bc ++;
+	}else
+	{
+		//cas 2: write passer, read non passer
+		if(bc.nb_write >= (bc.nb_read + (SIZE_BUFF/2)))		//test buff plein
+		{
+			return(0);
+		}
+	
+		*bc.write_bc = m_points[m_point].lastV;	//valeur de l'adc
+		bc.write_bc ++;
+
+		bc.nb_write++;							//on incremente l ecriture
+	}
+	return(0);
+}
+
+/* fonction de test de lecture */
+int read_buff(int m_point)
+{
+	if((bc.nb_write % (SIZE_BUFF/2)) >= (bc.nb_read % (SIZE_BUFF/2)))
+	{
+
+		// cas 1: write et read non passer
+
+		if(bc.nb_read >= bc.nb_write)
+		{
+			return(0);
+		}
+		
+		m_points[m_point].accum_data.test_tension = *bc.read_bc;	//valeur a envoyer
+
+		bc.nb_read++;												//on incremente le compteur
+
+		if(bc.read_bc >= bc.fin)
+		{
+			bc.read_bc = bc.debut;
+		}else
+			bc.read_bc ++;
+	}else
+	{
+		//cas 2: write passer, read non passer
+	
+		m_points[m_point].accum_data.test_tension = *bc.read_bc;	//valeur a envoyer
+		bc.read_bc ++;		//pas de probleme de fin du buffer
+
+		bc.nb_read++;												//on incremente le compteur
+	}
+	return(0);
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+
+
 void start_measurement(int m_point)
 {
     m_points[m_point].running = 1;
@@ -212,8 +336,13 @@ void start_measurement(int m_point)
     m_points[m_point].accum_data.peak_current = 0;
     m_points[m_point].accum_data.n_samples = 0;
     m_points[m_point].accum_data.avg_voltage = 0;
-    m_points[m_point].accum_data.avg_current = 0;
+    m_points[m_point].accum_data.test_tension = 0;
     m_points[m_point].lastP = 0;
+	
+
+	init_Buff();						// init buffer
+
+    m_points[m_point].id.current_time = 0;
 
     switch(m_points[m_point].assigned_adc)
     {
@@ -251,6 +380,7 @@ void stop_measurement(int m_point)
         default:
             error_condition(); return;
     }
+	buff_free();			//rendu de la mémoire
 }
 
 void flash_serial(char b1, char b2, char b3, char b4)
@@ -269,6 +399,7 @@ void flash_serial(char b1, char b2, char b3, char b4)
     flash_lock();
 }
 
+
 static int usbdev_control_request(usbd_device *usbd_dev, struct usb_setup_data *req, uint8_t **buf,
         uint16_t *len, void (**complete)(usbd_device *usbd_dev, struct usb_setup_data *req))
 {
@@ -279,7 +410,7 @@ static int usbdev_control_request(usbd_device *usbd_dev, struct usb_setup_data *
     (void)usbd_dev;
 
     switch (req->bRequest) {
-    case 0:    // toggle LEDS
+    case 0:     // toggle LEDS
         gpio_toggle(GPIOD, GPIO13);
         *len = 0;
         break;
@@ -340,6 +471,7 @@ static int usbdev_control_request(usbd_device *usbd_dev, struct usb_setup_data *
     }
     case 6:     // Get energy
     {
+		read_buff(req->wValue-1);
         *len = sizeof(accumulated_data);
         *buf = (uint8_t*)&m_points[req->wValue-1].accum_data;
         break;
@@ -373,20 +505,16 @@ static int usbdev_control_request(usbd_device *usbd_dev, struct usb_setup_data *
     case 11:    // Get instantaneous
     {
         int m_point = req->wValue - 1;
-        int tot_current = 0, tot_voltage = 0, i;
+        int  tot_voltage = 0, i;
         measurement_point *mp = &m_points[m_point];
 
-        mp->id.current = mp->lastI;
         mp->id.voltage = mp->lastV;
 
         for(i = 0; i < INSTANT_AVG_NUM; ++i)
         {
-            tot_current += mp->avgI[i];
             tot_voltage += mp->avgV[i];
         }
 
-        mp->id.average_current = tot_current >> INSTANT_AVG_BITS;
-        mp->id.average_voltage = tot_voltage >> INSTANT_AVG_BITS;
 
         mp->id.current_time = mp->accum_data.elapsed_time;
 
@@ -430,7 +558,6 @@ static void usbdev_set_config(usbd_device *usbd_dev, uint16_t wValue)
 {
     (void)wValue;
 
-    // usbd_ep_setup(usbd_dev, 0x01, USB_ENDPOINT_ATTR_BULK, 64, usbdev_data_rx_cb);
     usbd_ep_setup(usbd_dev, 0x81, USB_ENDPOINT_ATTR_BULK, 64, NULL);
     usbd_ep_setup(usbd_dev, 0x82, USB_ENDPOINT_ATTR_INTERRUPT, 64, NULL);
 
@@ -460,9 +587,7 @@ void timer_setup()
 
 void adc_setup()
 {
-    gpio_mode_setup(GPIOA, GPIO_MODE_ANALOG, GPIO_PUPD_NONE, GPIO1 | GPIO2 | GPIO3);
-    gpio_mode_setup(GPIOB, GPIO_MODE_ANALOG, GPIO_PUPD_NONE, GPIO0 | GPIO1);
-    gpio_mode_setup(GPIOC, GPIO_MODE_ANALOG, GPIO_PUPD_NONE, GPIO2 | GPIO4 | GPIO5);
+    gpio_mode_setup(GPIOC, GPIO_MODE_ANALOG, GPIO_PUPD_NONE, GPIO1 | GPIO2 | GPIO4 | GPIO5);
     rcc_peripheral_enable_clock(&RCC_APB2ENR, RCC_APB2ENR_ADC1EN);
     rcc_peripheral_enable_clock(&RCC_APB2ENR, RCC_APB2ENR_ADC2EN);
     rcc_peripheral_enable_clock(&RCC_APB2ENR, RCC_APB2ENR_ADC3EN);
@@ -484,21 +609,11 @@ void adc_setup()
     adc_set_single_conversion_mode(ADC3);
 
     // Input 1
-    uint8_t channels1[] = {2, 12};   // CH2 Voltage, PA2, ADC123
-    // uint8_t channels1[] = {ADC_CHANNEL2, ADC_CHANNEL12};   // Voltage, PA2, ADC123
-    // uint8_t channels2[] = {ADC_CHANNEL12};  // Ch12 Current, PC2, ADC123
-    // Input 2
-    // uint8_t channels1[] = {ADC_CHANNEL3};   // Voltage, PA3, ADC123
-    // uint8_t channels2[] = {ADC_CHANNEL1};   // Current, PA1, ADC123
-    // Input 3
-    // uint8_t channels1[] = {ADC_CHANNEL9};   // Voltage, PB1, ADC12
-    // uint8_t channels2[] = {ADC_CHANNEL15};  // Current, PC5, ADC12
-    // Input self
-    // uint8_t channels1[] = {ADC_CHANNEL8};   // Voltage, PB0, ADC12
-    // uint8_t channels2[] = {ADC_CHANNEL14};  // Current, PC4, ADC12
-    adc_set_regular_sequence(ADC1, 1, channels1);
-    adc_set_regular_sequence(ADC2, 1, channels1);
-    adc_set_regular_sequence(ADC3, 1, channels1);
+    uint8_t channels1[] = {14};   // CH2 Voltage, PC4, ADC12
+    uint8_t channels2[] = {15};   // CH2 Voltage, PC5, ADC12
+    uint8_t channels3[] = {12};   // CH2 Voltage, PC2, ADC123
+    uint8_t channels4[] = {11};   // CH2 Voltage, PC1, ADC123
+
     adc_set_sample_time_on_all_channels(ADC1, ADC_SMPR_SMP_15CYC);
     adc_set_sample_time_on_all_channels(ADC2, ADC_SMPR_SMP_15CYC);
     adc_set_sample_time_on_all_channels(ADC3, ADC_SMPR_SMP_15CYC);
@@ -600,17 +715,13 @@ int main(void)
         m_points[i].trigger_pin = -1;
     }
 
-    m_points[0].chans[0] = 2;
-    m_points[0].chans[1] = 12;
+    m_points[0].chans[0] = 14;	// sortie A PC4
 
-    m_points[1].chans[0] = 3;
-    m_points[1].chans[1] = 1;
+    m_points[1].chans[0] = 15;	// sortie B PC5
 
-    m_points[2].chans[0] = 9;
-    m_points[2].chans[1] = 15;
+    m_points[2].chans[0] = 12;	// sortie C PC2
 
-    m_points[3].chans[0] = 8;
-    m_points[3].chans[1] = 14;
+    m_points[3].chans[0] = 11;	// sortie D PC1
 
     adc_setup();
     timer_setup();
@@ -722,7 +833,7 @@ void adc_isr()
                 mp->lastV = val;
                 mp->avgV[mp->avg_ptr] = val;
             }
-
+	
             // Once we have read both current and voltage
             if((mp->idx & 1) == 1)
             {
@@ -741,7 +852,9 @@ void adc_isr()
                 a_data->n_samples += 1;
                 a_data->elapsed_time += tperiod;
                 a_data->avg_voltage += v;
-                a_data->avg_current += c;
+				//a_data->test_tension = mp->lastV;
+
+				write_buff(m_point);
 
                 if(p > a_data->peak_power)
                     a_data->peak_power = p;
