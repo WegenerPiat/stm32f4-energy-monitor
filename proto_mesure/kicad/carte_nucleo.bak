@@ -1,0 +1,243 @@
+EESchema Schematic File Version 2
+LIBS:power
+LIBS:device
+LIBS:transistors
+LIBS:conn
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
+LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
+LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
+LIBS:shunt
+LIBS:max4377
+LIBS:arduino_shieldsNCL
+LIBS:carte_mesure-cache
+EELAYER 25 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 3 4
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L GND #PWR010
+U 1 1 5792233A
+P 4500 4200
+F 0 "#PWR010" H 4500 3950 50  0001 C CNN
+F 1 "GND" H 4500 4050 50  0000 C CNN
+F 2 "" H 4500 4200 50  0000 C CNN
+F 3 "" H 4500 4200 50  0000 C CNN
+	1    4500 4200
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR011
+U 1 1 57922357
+P 7850 3500
+F 0 "#PWR011" H 7850 3250 50  0001 C CNN
+F 1 "GND" H 7850 3350 50  0000 C CNN
+F 2 "" H 7850 3500 50  0000 C CNN
+F 3 "" H 7850 3500 50  0000 C CNN
+	1    7850 3500
+	0    -1   -1   0   
+$EndComp
+$Comp
+L +3V3 #PWR012
+U 1 1 5792238E
+P 3500 3900
+F 0 "#PWR012" H 3500 3750 50  0001 C CNN
+F 1 "+3V3" H 3500 4040 50  0000 C CNN
+F 2 "" H 3500 3900 50  0000 C CNN
+F 3 "" H 3500 3900 50  0000 C CNN
+	1    3500 3900
+	0    -1   -1   0   
+$EndComp
+$Comp
+L ARDUINO_SHIELD_NUCLEO SHIELD1
+U 1 1 579224C7
+P 6000 4100
+F 0 "SHIELD1" H 5550 5150 60  0000 C CNN
+F 1 "ARDUINO_SHIELD_NUCLEO" H 6050 3050 60  0000 C CNN
+F 2 "arduino_shields_nucleo:ARDUINO_SHIELD_NUCLEO" H 6000 4000 60  0001 C CNN
+F 3 "" H 6000 4000 60  0000 C CNN
+	1    6000 4100
+	1    0    0    -1  
+$EndComp
+NoConn ~ 5050 4300
+NoConn ~ 5050 3700
+NoConn ~ 6950 3400
+Text HLabel 4850 4500 0    60   Input ~ 0
+MP_A1
+Text HLabel 4850 4600 0    60   Input ~ 0
+MP_A2
+Text HLabel 4850 4900 0    60   Input ~ 0
+MP_B1
+Text HLabel 4850 5000 0    60   Input ~ 0
+MP_B2
+Text HLabel 7200 4900 2    60   Output ~ 0
+TX1
+Text HLabel 7200 5000 2    60   Input ~ 0
+RX1
+Text HLabel 7200 4100 2    60   Output ~ 0
+TX2
+Text HLabel 7200 4800 2    60   Input ~ 0
+RX2
+Text HLabel 7200 3700 2    60   Output ~ 0
+PWD1
+Text HLabel 7200 3800 2    60   Output ~ 0
+Reset1
+Text HLabel 7200 3900 2    60   Output ~ 0
+PWD2
+Text HLabel 7200 4000 2    60   Output ~ 0
+Reset2
+$Comp
+L LED D1
+U 1 1 5798BA56
+P 8300 4200
+F 0 "D1" H 8300 4300 50  0000 C CNN
+F 1 "LED" H 8300 4100 50  0000 C CNN
+F 2 "LEDs:LED-3MM" H 8300 4200 50  0001 C CNN
+F 3 "" H 8300 4200 50  0000 C CNN
+	1    8300 4200
+	0    -1   -1   0   
+$EndComp
+$Comp
+L R R1
+U 1 1 5798BAE5
+P 8300 3750
+F 0 "R1" V 8380 3750 50  0000 C CNN
+F 1 "680R" V 8300 3750 50  0000 C CNN
+F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM10mm" V 8230 3750 50  0001 C CNN
+F 3 "" H 8300 3750 50  0000 C CNN
+	1    8300 3750
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR013
+U 1 1 5798BB00
+P 8300 4500
+F 0 "#PWR013" H 8300 4250 50  0001 C CNN
+F 1 "GND" H 8300 4350 50  0000 C CNN
+F 2 "" H 8300 4500 50  0000 C CNN
+F 3 "" H 8300 4500 50  0000 C CNN
+	1    8300 4500
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6950 3900 7200 3900
+Wire Wire Line
+	6950 3800 7200 3800
+Wire Wire Line
+	6950 3700 7200 3700
+Wire Wire Line
+	8300 4400 8300 4500
+Wire Wire Line
+	6950 3600 8300 3600
+Wire Wire Line
+	6950 4800 7200 4800
+Wire Wire Line
+	7200 4100 6950 4100
+Wire Wire Line
+	7200 5000 6950 5000
+Wire Wire Line
+	6950 4900 7200 4900
+Wire Wire Line
+	5050 5000 4850 5000
+Wire Wire Line
+	4850 4900 5050 4900
+Wire Wire Line
+	5050 4600 4850 4600
+Wire Wire Line
+	4850 4500 5050 4500
+Wire Wire Line
+	3500 3900 5050 3900
+Wire Wire Line
+	7850 3500 6950 3500
+Wire Wire Line
+	4500 4100 4500 4200
+Wire Wire Line
+	5050 4100 4500 4100
+Wire Wire Line
+	4500 4200 5050 4200
+Wire Wire Line
+	6950 4000 7200 4000
+NoConn ~ 5050 4700
+NoConn ~ 5050 4800
+NoConn ~ 5050 3800
+NoConn ~ 6950 3200
+NoConn ~ 6950 3300
+NoConn ~ 6950 4300
+NoConn ~ 6950 4400
+NoConn ~ 6950 4500
+NoConn ~ 6950 4600
+NoConn ~ 6950 4700
+$Comp
+L C C2
+U 1 1 5798F9EE
+P 3650 4050
+F 0 "C2" H 3675 4150 50  0000 L CNN
+F 1 "100nF" H 3400 3950 50  0000 L CNN
+F 2 "Capacitors_ThroughHole:C_Rect_L7_W2.5_P5" H 3688 3900 50  0001 C CNN
+F 3 "" H 3650 4050 50  0000 C CNN
+	1    3650 4050
+	1    0    0    -1  
+$EndComp
+Connection ~ 3650 3900
+$Comp
+L GND #PWR014
+U 1 1 5798FBB5
+P 3650 4300
+F 0 "#PWR014" H 3650 4050 50  0001 C CNN
+F 1 "GND" H 3650 4150 50  0000 C CNN
+F 2 "" H 3650 4300 50  0000 C CNN
+F 3 "" H 3650 4300 50  0000 C CNN
+	1    3650 4300
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3650 4300 3650 4200
+$Comp
+L PWR_FLAG #FLG015
+U 1 1 5799EB9B
+P 3550 3700
+F 0 "#FLG015" H 3550 3795 50  0001 C CNN
+F 1 "PWR_FLAG" H 3550 3880 50  0000 C CNN
+F 2 "" H 3550 3700 50  0000 C CNN
+F 3 "" H 3550 3700 50  0000 C CNN
+	1    3550 3700
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3550 3700 3550 3900
+Connection ~ 3550 3900
+Wire Wire Line
+	8300 3900 8300 4000
+NoConn ~ 5050 4000
+$EndSCHEMATC

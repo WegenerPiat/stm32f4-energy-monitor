@@ -1,0 +1,5 @@
+(fp_lib_table
+  (lib (name shunt)(type Legacy)(uri /home/wegener/Documents/PIAT/OLD_MESURE_COURANT/KICAD/PROTO_EFFECTIF/PROTO_MAXIM/shunt.mod)(options "")(descr ""))
+  (lib (name arduino_shields)(type Legacy)(uri /home/wegener/Documents/PIAT/proto_mesure/lib/arduino_shields.mod)(options "")(descr ""))
+  (lib (name arduino_shields_nucleo)(type KiCad)(uri /home/wegener/Documents/PIAT/proto_mesure/lib/arduino_shields_nucleo.pretty)(options "")(descr ""))
+)

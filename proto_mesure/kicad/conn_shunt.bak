@@ -1,0 +1,279 @@
+EESchema Schematic File Version 2
+LIBS:power
+LIBS:device
+LIBS:transistors
+LIBS:conn
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
+LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
+LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
+LIBS:shunt
+LIBS:max4377
+LIBS:arduino_shieldsNCL
+LIBS:carte_mesure-cache
+EELAYER 25 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 4 4
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L Shunt Rsh??
+U 1 1 5790CF45
+P 2450 3400
+AR Path="/578F869F/5790CF45" Ref="Rsh??"  Part="1" 
+AR Path="/5790CF91/5790CF45" Ref="Rsh??"  Part="1" 
+F 0 "Rsh??" H 2450 3550 60  0000 C CNN
+F 1 "Shunt" H 2450 3250 60  0000 C CNN
+F 2 "" H 2450 3400 60  0000 C CNN
+F 3 "" H 2450 3400 60  0000 C CNN
+	1    2450 3400
+	0    -1   -1   0   
+$EndComp
+$Comp
+L CONN_01X03 P?
+U 1 1 5790D2DD
+P 1450 3400
+AR Path="/578F869F/5790D2DD" Ref="P?"  Part="1" 
+AR Path="/5790CF91/5790D2DD" Ref="P?"  Part="1" 
+F 0 "P?" H 1450 3600 50  0000 C CNN
+F 1 "CONN_01X03" H 1550 3100 50  0000 C CNN
+F 2 "" H 1450 3400 50  0000 C CNN
+F 3 "" H 1450 3400 50  0000 C CNN
+	1    1450 3400
+	-1   0    0    1   
+$EndComp
+$Comp
+L GND #PWR?
+U 1 1 5790D455
+P 2150 3450
+AR Path="/578F869F/5790D455" Ref="#PWR?"  Part="1" 
+AR Path="/5790CF91/5790D455" Ref="#PWR?"  Part="1" 
+F 0 "#PWR?" H 2150 3200 50  0001 C CNN
+F 1 "GND" H 2150 3300 50  0000 C CNN
+F 2 "" H 2150 3450 50  0000 C CNN
+F 3 "" H 2150 3450 50  0000 C CNN
+	1    2150 3450
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2050 3300 1650 3300
+Wire Wire Line
+	1650 3500 2050 3500
+Wire Wire Line
+	1650 3400 2150 3400
+Wire Wire Line
+	2150 3400 2150 3450
+Wire Wire Line
+	2050 2850 2050 3300
+Wire Wire Line
+	2050 3500 2050 3950
+$Comp
+L CONN_01X03 P?
+U 1 1 5790D806
+P 6650 3450
+AR Path="/578F869F/5790D806" Ref="P?"  Part="1" 
+AR Path="/5790CF91/5790D806" Ref="P?"  Part="1" 
+F 0 "P?" H 6650 3650 50  0000 C CNN
+F 1 "CONN_01X03" H 6750 3150 50  0000 C CNN
+F 2 "" H 6650 3450 50  0000 C CNN
+F 3 "" H 6650 3450 50  0000 C CNN
+	1    6650 3450
+	-1   0    0    1   
+$EndComp
+$Comp
+L GND #PWR?
+U 1 1 5790D80C
+P 7350 3500
+AR Path="/578F869F/5790D80C" Ref="#PWR?"  Part="1" 
+AR Path="/5790CF91/5790D80C" Ref="#PWR?"  Part="1" 
+F 0 "#PWR?" H 7350 3250 50  0001 C CNN
+F 1 "GND" H 7350 3350 50  0000 C CNN
+F 2 "" H 7350 3500 50  0000 C CNN
+F 3 "" H 7350 3500 50  0000 C CNN
+	1    7350 3500
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7250 3350 6850 3350
+Wire Wire Line
+	6850 3550 7250 3550
+Wire Wire Line
+	6850 3450 7350 3450
+Wire Wire Line
+	7350 3450 7350 3500
+Wire Wire Line
+	7250 2900 7250 3350
+Wire Wire Line
+	7250 3550 7250 3950
+$Comp
+L MAX4377 U?
+U 1 1 5790DCDB
+P 3800 3800
+AR Path="/578F869F/5790DCDB" Ref="U?"  Part="1" 
+AR Path="/5790CF91/5790DCDB" Ref="U?"  Part="1" 
+F 0 "U?" H 3950 4500 60  0000 C CNN
+F 1 "MAX4377" H 3250 4550 60  0000 C CNN
+F 2 "" H 3800 3800 60  0000 C CNN
+F 3 "" H 3800 3800 60  0000 C CNN
+	1    3800 3800
+	1    0    0    -1  
+$EndComp
+$Comp
+L MAX4377 U?
+U 2 1 5790DDE1
+P 8950 3850
+AR Path="/578F869F/5790DDE1" Ref="U?"  Part="2" 
+AR Path="/5790CF91/5790DDE1" Ref="U?"  Part="2" 
+F 0 "U?" H 9100 4550 60  0000 C CNN
+F 1 "MAX4377" H 8450 4600 60  0000 C CNN
+F 2 "" H 8950 3850 60  0000 C CNN
+F 3 "" H 8950 3850 60  0000 C CNN
+	2    8950 3850
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR?
+U 1 1 5790DEEE
+P 3650 4050
+AR Path="/578F869F/5790DEEE" Ref="#PWR?"  Part="1" 
+AR Path="/5790CF91/5790DEEE" Ref="#PWR?"  Part="1" 
+F 0 "#PWR?" H 3650 3800 50  0001 C CNN
+F 1 "GND" H 3650 3900 50  0000 C CNN
+F 2 "" H 3650 4050 50  0000 C CNN
+F 3 "" H 3650 4050 50  0000 C CNN
+	1    3650 4050
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR?
+U 1 1 5790DF3E
+P 8800 4150
+AR Path="/578F869F/5790DF3E" Ref="#PWR?"  Part="1" 
+AR Path="/5790CF91/5790DF3E" Ref="#PWR?"  Part="1" 
+F 0 "#PWR?" H 8800 3900 50  0001 C CNN
+F 1 "GND" H 8800 4000 50  0000 C CNN
+F 2 "" H 8800 4150 50  0000 C CNN
+F 3 "" H 8800 4150 50  0000 C CNN
+	1    8800 4150
+	1    0    0    -1  
+$EndComp
+$Comp
+L VCC #PWR?
+U 1 1 5790DF88
+P 3650 2750
+AR Path="/578F869F/5790DF88" Ref="#PWR?"  Part="1" 
+AR Path="/5790CF91/5790DF88" Ref="#PWR?"  Part="1" 
+F 0 "#PWR?" H 3650 2600 50  0001 C CNN
+F 1 "VCC" H 3650 2900 50  0000 C CNN
+F 2 "" H 3650 2750 50  0000 C CNN
+F 3 "" H 3650 2750 50  0000 C CNN
+	1    3650 2750
+	1    0    0    -1  
+$EndComp
+$Comp
+L VCC #PWR?
+U 1 1 5790DFBA
+P 8800 2700
+AR Path="/578F869F/5790DFBA" Ref="#PWR?"  Part="1" 
+AR Path="/5790CF91/5790DFBA" Ref="#PWR?"  Part="1" 
+F 0 "#PWR?" H 8800 2550 50  0001 C CNN
+F 1 "VCC" H 8800 2850 50  0000 C CNN
+F 2 "" H 8800 2700 50  0000 C CNN
+F 3 "" H 8800 2700 50  0000 C CNN
+	1    8800 2700
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8800 2700 8800 2900
+Wire Wire Line
+	8000 2900 8000 3400
+Wire Wire Line
+	8000 3400 8200 3400
+Wire Wire Line
+	7250 3950 8000 3950
+$Comp
+L Shunt Rsh?
+U 1 1 5790D800
+P 7650 3450
+AR Path="/578F869F/5790D800" Ref="Rsh?"  Part="1" 
+AR Path="/5790CF91/5790D800" Ref="Rsh?"  Part="1" 
+F 0 "Rsh?" H 7650 3600 60  0000 C CNN
+F 1 "Shunt" H 7650 3300 60  0000 C CNN
+F 2 "" H 7650 3450 60  0000 C CNN
+F 3 "" H 7650 3450 60  0000 C CNN
+	1    7650 3450
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	8000 2900 7250 2900
+Wire Wire Line
+	7650 2950 7650 2900
+Connection ~ 7650 2900
+Connection ~ 7650 3950
+Wire Wire Line
+	8200 3500 8000 3500
+Wire Wire Line
+	8000 3500 8000 3950
+Wire Wire Line
+	8800 4000 8800 4150
+Wire Wire Line
+	2050 2850 2800 2850
+Wire Wire Line
+	2800 2850 2800 3350
+Wire Wire Line
+	2800 3350 3050 3350
+Wire Wire Line
+	3050 3450 2800 3450
+Wire Wire Line
+	2800 3450 2800 3950
+Wire Wire Line
+	2800 3950 2050 3950
+Wire Wire Line
+	2450 3900 2450 3950
+Connection ~ 2450 3950
+Wire Wire Line
+	2450 2900 2450 2850
+Connection ~ 2450 2850
+Wire Wire Line
+	3650 4050 3650 3950
+Wire Wire Line
+	3650 2750 3650 2850
+Text HLabel 4800 3350 2    60   Output ~ 0
+OUT_B1
+Text HLabel 10150 3400 2    60   Output ~ 0
+OUT_B2
+Wire Wire Line
+	9400 3400 10150 3400
+Wire Wire Line
+	4250 3350 4800 3350
+$EndSCHEMATC
